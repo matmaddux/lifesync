@@ -13,12 +13,18 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
+    <main className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-200">
         
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">
-          LifeSync
-        </h1>
+        {/* Header */}
+        <div className="mb-5">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            LifeSync
+          </h1>
+          <p className="text-sm text-gray-500">
+            Capture and organize your life
+          </p>
+        </div>
 
         {/* Input */}
         <div className="flex gap-2 mb-6">
@@ -26,29 +32,34 @@ export default function Home() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Capture anything..."
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="flex-1 border border-gray-300 rounded-xl px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-black transition"
           />
           <button
             onClick={addTask}
-            className="bg-black text-white px-4 rounded-lg hover:bg-gray-800"
+            className="bg-black text-white px-4 rounded-xl hover:bg-gray-800 active:scale-95 transition"
           >
             +
           </button>
         </div>
 
         {/* Sections */}
-        <div className="space-y-4">
+        <div className="space-y-5">
 
+          {/* Inbox */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-500 mb-2">📥 Inbox</h2>
+            <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
+              Inbox
+            </h2>
+
             {tasks.length === 0 && (
               <p className="text-gray-400 text-sm">No tasks yet</p>
             )}
+
             <ul className="space-y-2">
               {tasks.map((task, i) => (
                 <li
                   key={i}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-gray-700"
+                  className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-700 shadow-sm hover:shadow-md transition"
                 >
                   {task}
                 </li>
@@ -56,16 +67,23 @@ export default function Home() {
             </ul>
           </div>
 
-          <div>
-            <h2 className="text-sm font-semibold text-gray-500">🔥 Top 3</h2>
-          </div>
+          {/* Divider */}
+          <div className="border-t border-gray-200" />
 
-          <div>
-            <h2 className="text-sm font-semibold text-gray-500">📋 Tasks</h2>
-          </div>
-
-          <div>
-            <h2 className="text-sm font-semibold text-gray-500">✅ Completed</h2>
+          {/* Other Sections */}
+          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
+              🔥 Top 3
+            </div>
+            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
+              📋 Tasks
+            </div>
+            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
+              📥 Inbox
+            </div>
+            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
+              ✅ Completed
+            </div>
           </div>
 
         </div>
