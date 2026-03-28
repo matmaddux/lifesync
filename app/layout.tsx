@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "LifeSync",
-  description: "Organize your life",
+  description: "Capture anything",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   },
   themeColor: "#000000",
   icons: {
+    icon: "/icon.png"
     apple: "/icon.png",
   },
 };
