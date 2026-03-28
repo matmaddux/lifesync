@@ -45,7 +45,7 @@ export default function Home() {
   const toggleTop = (id: string) => {
     setTasks(
       tasks.map((t) =>
-        t.id === !id ? { ...t, top: !t.top } : t
+        t.id === id ? { ...t, top: !t.top } : t
       )
     );
   };
