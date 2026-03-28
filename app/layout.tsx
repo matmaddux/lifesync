@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   themeColor: "#000000",
   icons: {
     icon: "/icon.png"
-    apple: "/icon.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
