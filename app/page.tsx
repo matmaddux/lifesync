@@ -6,6 +6,7 @@ type Task = {
   id: string;
   text: string;
   completed: boolean;
+  top: boolean;
 };
 
 export default function Home() {
@@ -27,7 +28,7 @@ export default function Home() {
     if (!input.trim()) return;
 
     setTasks([
-      { id: Date.now().toString(), text: input, completed: false },
+      { id: Date.now().toString(), text: input, completed: false, top: false },
       ...tasks,
     ]);
     setInput("");
@@ -38,6 +39,14 @@ export default function Home() {
       tasks.map((t) =>
         t.id === id ? { ...t, completed: !t.completed } : t
       )
+    );
+  };
+
+  const toggleTop = (id: string) => {
+    setTasks(
+      tasks.map((t) =>
+        t.id === id ? { ...t, top !t.top }
+      )
     );
   };
 
