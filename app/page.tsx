@@ -43,12 +43,25 @@ export default function Home() {
   };
 
   const toggleTop = (id: string) => {
-    setTasks(
-      tasks.map((t) =>
-        t.id === id ? { ...t, top: !t.top } : t
-      )
-    );
-  };
+    const currentTopCount = tasks.filter(t => t.top && !t.completed).length;
+
+  setTasks(
+    tasks.map((t) => {
+      if (t.id !== id) return t;
+
+      // If already top → allow removing
+      if (t.top) return { ...t, top: false };
+
+      // If adding new top but already 3 → block
+      if (currentTopCount >= 3) {
+        alert("You can only have 3 Top tasks");
+        return t;
+      }
+
+      return { ...t, top: true };
+    })
+  );
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
