@@ -1,93 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+type Task = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
 
 export default function Home() {
-  const [input, setInput] = useState("");
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [input, setInput] = useState("");
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  function addTask() {
-    if (!input.trim()) return;
-    setTasks([input, ...tasks]);
-    setInput("");
-  }
+  // Load saved tasks
+  useEffect(() => {
+    const saved = localStorage.getItem("lifesync-tasks");
+    if (saved) setTasks(JSON.parse(saved));
+  }, []);
 
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-200">
-        
-        {/* Header */}
-        <div className="mb-5">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            LifeSync
-          </h1>
-          <p className="text-sm text-gray-500">
-            Capture and organize your life
-          </p>
-        </div>
+  // Save tasks
+  useEffect(() => {
+    localStorage.setItem("lifesync-tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
-        {/* Input */}
-        <div className="flex gap-2 mb-6">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Capture anything..."
-            className="flex-1 border border-gray-300 rounded-xl px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-black transition"
-          />
-          <button
-            onClick={addTask}
-            className="bg-black text-white px-4 rounded-xl hover:bg-gray-800 active:scale-95 transition"
-          >
-            +
-          </button>
-        </div>
+  const addTask = () => {
+    if (!input.trim()) return;
 
-        {/* Sections */}
-        <div className="space-y-5">
+    setTasks([
+      { id: Date.now().toString(), text: input, completed: false },
+      ...tasks,
+    ]);
+    setInput("");
+  };
 
-          {/* Inbox */}
-          <div>
-            <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-              Inbox
-            </h2>
+  const toggleTask = (id: string) => {
+    setTasks(
+      tasks.map((t) =>
+        t.id === id ? { ...t, completed: !t.completed } : t
+      )
+    );
+  };
 
-            {tasks.length === 0 && (
-              <p className="text-gray-400 text-sm">No tasks yet</p>
-            )}
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow p-4">
+        <h1 className="text-xl font-bold mb-3">LifeSync</h1>
 
-            <ul className="space-y-2">
-              {tasks.map((task, i) => (
-                <li
-                  key={i}
-                  className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-700 shadow-sm hover:shadow-md transition"
-                >
-                  {task}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="flex gap-2 mb-4">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Capture anything..."
+            className="flex-1 border rounded-lg px-3 py-2"
+          />
+          <button
+            onClick={addTask}
+            className="bg-black text-white px-3 rounded-lg active:scale-90 transition"
+          >
+            +
+          </button>
+        </div>
 
-          {/* Divider */}
-          <div className="border-t border-gray-200" />
-
-          {/* Other Sections */}
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
-              🔥 Top 3
-            </div>
-            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
-              📋 Tasks
-            </div>
-            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
-              📥 Inbox
-            </div>
-            <div className="bg-white border rounded-xl p-3 text-center shadow-sm">
-              ✅ Completed
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </main>
-  );
+        <div className="space-y-2">
+          {tasks.map((task) => (
+            <div
+              key={task.id}
+              onClick={() => toggleTask(task.id)}
+              className={`p-2 rounded-lg border cursor-pointer ${
+                task.completed ? "bg-green-100 line-through" : ""
+              }`}
+            >
+              {task.text}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
