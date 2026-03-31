@@ -72,100 +72,61 @@ export default function Home() {
 
   const topTasks = tasks.filter((t) => t.top && !t.completed);
   const otherTasks = tasks.filter((t) => !t.top && !t.completed);
+  
+return (
+  <div className="min-h-screen bg-neutral-100 flex justify-center px-4 pt-10">
+    <div className="w-full max-w-md">
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-start justify-center p-4">
-      <div className="w-full max-w-sm">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-semibold tracking-tight">LifeSync</h1>
+        <p className="text-sm text-gray-500">Capture → Focus → Execute</p>
+      </div>
 
-        {/* Header */}
-        <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-          LifeSync
-        </h1>
+      {/* Input */}
+      <div className="flex gap-2 mb-6">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="What needs your attention?"
+          className="flex-1 bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+        />
+        <button
+          onClick={addTask}
+          className="bg-black text-white px-5 rounded-2xl shadow active:scale-95 transition"
+        >
+          +
+        </button>
+      </div>
 
-        {/* Input */}
-        <div className="flex gap-2 mb-6">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Capture anything..."
-            className="flex-1 border border-gray-300 rounded-xl px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-black"
-          />
-          <button
-            onClick={addTask}
-            className="bg-black text-white px-4 rounded-xl active:scale-90 transition"
-          >
-            +
-          </button>
-        </div>
-
-        {/* TOP 3 */}
-        {topTasks.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-              Top 3
-            </h2>
-
-            <div className="space-y-3">
-              {topTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 shadow-sm"
-                >
-                  <div
-                    onClick={() => toggleTask(task.id)}
-                    className="font-medium text-gray-900 cursor-pointer"
-                  >
-                    {task.text}
-                  </div>
-
-                  <div className="flex gap-4 mt-2 text-xs">
-                    <button
-                      onClick={() => toggleTop(task.id)}
-                      className="text-blue-600"
-                    >
-                      Remove
-                    </button>
-                    <button
-                      onClick={() => deleteTask(task.id)}
-                      className="text-red-500"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* TASKS */}
-        <div>
-          <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-            Tasks
+      {/* TOP 3 */}
+      {topTasks.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xs uppercase tracking-widest text-gray-400 mb-3">
+            Top 3 Priorities
           </h2>
 
-          <div className="space-y-2">
-            {otherTasks.map((task) => (
+          <div className="space-y-3">
+            {topTasks.map((task) => (
               <div
                 key={task.id}
-                className={`bg-white border rounded-xl p-3 shadow-sm ${
-                  task.completed ? "opacity-50 line-through" : ""
-                }`}
+                className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md"
               >
                 <div
                   onClick={() => toggleTask(task.id)}
-                  className="cursor-pointer text-gray-800"
+                  className="text-lg font-medium cursor-pointer"
                 >
                   {task.text}
                 </div>
 
-                <div className="flex gap-4 mt-2 text-xs">
+                <div className="flex gap-4 mt-3 text-xs">
                   <button
                     onClick={() => toggleTop(task.id)}
                     className="text-gray-500"
                   >
-                    Top
+                    Remove
                   </button>
+
                   <button
                     onClick={() => deleteTask(task.id)}
                     className="text-red-500"
@@ -177,8 +138,49 @@ export default function Home() {
             ))}
           </div>
         </div>
+      )}
 
+      {/* TASKS */}
+      <div>
+        <h2 className="text-xs uppercase tracking-widest text-gray-400 mb-3">
+          Everything Else
+        </h2>
+
+        <div className="space-y-2">
+          {otherTasks.map((task) => (
+            <div
+              key={task.id}
+              className={`bg-white border border-gray-200 rounded-2xl p-3 shadow-sm transition ${
+                task.completed ? "opacity-40 line-through" : ""
+              }`}
+            >
+              <div
+                onClick={() => toggleTask(task.id)}
+                className="cursor-pointer"
+              >
+                {task.text}
+              </div>
+
+              <div className="flex gap-4 mt-2 text-xs">
+                <button
+                  onClick={() => toggleTop(task.id)}
+                  className="text-gray-400"
+                >
+                  Top
+                </button>
+
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="text-red-400"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
     </div>
-  );
-}
+  </div>
+);
