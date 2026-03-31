@@ -50,12 +50,13 @@ export default function Home() {
     );
   };
 
-  Const deleteTask = (id: string) => {
+  const deleteTask = (id: string) => {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
   const toggleTop = (id: string) => {
     const currentTopCount = tasks.filter(t => t.top && !t.completed).length;
+  };
 
   setTasks(
     tasks.map((t) => {
@@ -68,7 +69,7 @@ export default function Home() {
       if (currentTopCount >= 3) {
         alert("You can only have 3 Top tasks");
         return t;
-      }
+      };
 
    const deleteTask = (id: string) => {
      setTasks(tasks.filter((t) => t.id !== id));
