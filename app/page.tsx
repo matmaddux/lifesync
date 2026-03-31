@@ -44,7 +44,7 @@ export default function Home() {
 
   const deleteTask = (id: string) => {
     setTasks(
-      tasks.map((t) +.
+      tasks.map((t) =>
         t.id === id ? { ...t, completed: !t.completed } : t
       )
     );
