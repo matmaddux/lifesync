@@ -58,6 +58,10 @@ export default function Home() {
         return t;
       }
 
+   const deleteTask = (id: string) => {
+     setTasks(tasks.filter((t) => t.id !== id));
+   };
+
       return { ...t, top: true };
     })
   );
@@ -83,19 +87,29 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="space-y-2">
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              onClick={() => toggleTask(task.id)}
-              className={`p-2 rounded-lg border cursor-pointer ${
-                task.completed ? "bg-green-100 line-through" : ""
-              }`}
-            >
-              {task.text}
-            </div>
-          ))}
-        </div>
+   <div className="space-y-2">
+     {tasks.map((task) => (
+       <div
+         key={task.id}
+         className={`p-2 rounded-lg border ${
+           task.completed ? "bg-green-100 line-through" : ""
+         }`}
+       >
+         {/* Task text */}
+         <div onClick={() => toggleTask(task.id)} className="cursor-pointer">
+           {task.text}
+         </div>
+
+         {/* Delete button */}
+         <button
+           onClick={() => deleteTask(task.id)}
+           className="text-red-500 text-xs mt-1"
+         >
+           Delete
+         </button>
+       </div>
+     ))}
+   </div>
       </div>
     </div>
   );
