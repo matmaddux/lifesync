@@ -42,6 +42,18 @@ export default function Home() {
     );
   };
 
+  const deleteTask = (id: string) => {
+    setTasks(
+      tasks.map((t) +.
+        t.id === id ? { ...t, completed: !t.completed } : t
+      )
+    );
+  };
+
+  Const deleteTask = (id: string) => {
+    setTasks(tasks.filter((t) => t.id !== id));
+  };
+
   const toggleTop = (id: string) => {
     const currentTopCount = tasks.filter(t => t.top && !t.completed).length;
 
