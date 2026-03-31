@@ -6,7 +6,7 @@ type Task = {
   id: string;
   text: string;
   completed: boolean;
-  top: boolean;
+  top: boolean;
 };
 
 export default function Home() {
@@ -28,7 +28,12 @@ export default function Home() {
     if (!input.trim()) return;
 
     setTasks([
-      { id: Date.now().toString(), text: input, completed: false, top: false },
+      {
+        id: Date.now().toString(),
+        text: input,
+        completed: false,
+        top: false,
+      },
       ...tasks,
     ]);
     setInput("");
@@ -42,49 +47,37 @@ export default function Home() {
     );
   };
 
-  const deleteTask = (id: string) => {
-    setTasks(
-      tasks.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      )
-    );
-  };
+  const deleteTask = (id: string) => {
+    setTasks(tasks.filter((t) => t.id !== id));
+  };
 
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter((t) => t.id !== id));
-  };
+  const toggleTop = (id: string) => {
+    const currentTopCount = tasks.filter(
+      (t) => t.top && !t.completed
+    ).length;
 
-  const toggleTop = (id: string) => {
-    const currentTopCount = tasks.filter(t => t.top && !t.completed).length;
-  };
+    setTasks(
+      tasks.map((t) => {
+        if (t.id !== id) return t;
 
-  setTasks(
-    tasks.map((t) => {
-      if (t.id !== id) return t;
+        if (t.top) return { ...t, top: false };
 
-      // If already top → allow removing
-      if (t.top) return { ...t, top: false };
+        if (currentTopCount >= 3) {
+          alert("You can only have 3 Top tasks");
+          return t;
+        }
 
-      // If adding new top but already 3 → block
-      if (currentTopCount >= 3) {
-        alert("You can only have 3 Top tasks");
-        return t;
-      };
-
-   const deleteTask = (id: string) => {
-     setTasks(tasks.filter((t) => t.id !== id));
-   };
-
-      return { ...t, top: true };
-    })
-  );
-};
+        return { ...t, top: true };
+      })
+    );
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow p-4">
         <h1 className="text-xl font-bold mb-3">LifeSync</h1>
 
+        {/* Input */}
         <div className="flex gap-2 mb-4">
           <input
             value={input}
@@ -100,29 +93,44 @@ export default function Home() {
           </button>
         </div>
 
-   <div className="space-y-2">
-     {tasks.map((task) => (
-       <div
-         key={task.id}
-         className={`p-2 rounded-lg border ${
-           task.completed ? "bg-green-100 line-through" : ""
-         }`}
-       >
-         {/* Task text */}
-         <div onClick={() => toggleTask(task.id)} className="cursor-pointer">
-           {task.text}
-         </div>
+        {/* Tasks */}
+        <div className="space-y-2">
+          {tasks.map((task) => (
+            <div
+              key={task.id}
+              className={`p-2 rounded-lg border ${
+                task.completed ? "bg-green-100 line-through" : ""
+              }`}
+            >
+              {/* Task text */}
+              <div
+                onClick={() => toggleTask(task.id)}
+                className="cursor-pointer"
+              >
+                {task.text}
+              </div>
 
-         {/* Delete button */}
-         <button
-           onClick={() => deleteTask(task.id)}
-           className="text-red-500 text-xs mt-1"
-         >
-           Delete
-         </button>
-       </div>
-     ))}
-   </div>
+              {/* Buttons */}
+              <div className="flex gap-3 mt-1">
+                <button
+                  onClick={() => toggleTop(task.id)}
+                  className={`text-xs ${
+                    task.top ? "text-blue-600 font-bold" : "text-gray-500"
+                  }`}
+                >
+                  Top
+                </button>
+
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="text-red-500 text-xs"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
