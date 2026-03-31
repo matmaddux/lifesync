@@ -24,6 +24,7 @@ export default function Home() {
     localStorage.setItem("lifesync-tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  // Add task
   const addTask = () => {
     if (!input.trim()) return;
 
@@ -36,9 +37,11 @@ export default function Home() {
       },
       ...tasks,
     ]);
+
     setInput("");
   };
 
+  // Toggle complete
   const toggleTask = (id: string) => {
     setTasks(
       tasks.map((t) =>
@@ -47,10 +50,12 @@ export default function Home() {
     );
   };
 
+  // Delete task
   const deleteTask = (id: string) => {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
+  // Toggle Top 3
   const toggleTop = (id: string) => {
     const currentTopCount = tasks.filter(
       (t) => t.top && !t.completed
@@ -60,8 +65,10 @@ export default function Home() {
       tasks.map((t) => {
         if (t.id !== id) return t;
 
+        // remove from top
         if (t.top) return { ...t, top: false };
 
+        // limit to 3
         if (currentTopCount >= 3) {
           alert("You can only have 3 Top tasks");
           return t;
@@ -71,6 +78,10 @@ export default function Home() {
       })
     );
   };
+
+  // Split tasks
+  const topTasks = tasks.filter((t) => t.top && !t.completed);
+  const otherTasks = tasks.filter((t) => !t.top && !t.completed);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -93,16 +104,60 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Tasks */}
+        {/* TOP 3 */}
+        {topTasks.length > 0 && (
+          <>
+            <h2 className="text-sm font-bold text-gray-500 mb-1">
+              🔥 Top 3
+            </h2>
+
+            <div className="space-y-2 mb-4">
+              {topTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="p-2 rounded-lg border bg-yellow-100"
+                >
+                  <div
+                    onClick={() => toggleTask(task.id)}
+                    className="cursor-pointer font-semibold"
+                  >
+                    {task.text}
+                  </div>
+
+                  <div className="flex gap-3 mt-1">
+                    <button
+                      onClick={() => toggleTop(task.id)}
+                      className="text-xs text-blue-600 font-bold"
+                    >
+                      Remove Top
+                    </button>
+
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="text-red-500 text-xs"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* OTHER TASKS */}
+        <h2 className="text-sm font-bold text-gray-500 mb-1">
+          📝 Tasks
+        </h2>
+
         <div className="space-y-2">
-          {tasks.map((task) => (
+          {otherTasks.map((task) => (
             <div
               key={task.id}
               className={`p-2 rounded-lg border ${
                 task.completed ? "bg-green-100 line-through" : ""
               }`}
             >
-              {/* Task text */}
               <div
                 onClick={() => toggleTask(task.id)}
                 className="cursor-pointer"
@@ -110,13 +165,10 @@ export default function Home() {
                 {task.text}
               </div>
 
-              {/* Buttons */}
               <div className="flex gap-3 mt-1">
                 <button
                   onClick={() => toggleTop(task.id)}
-                  className={`text-xs ${
-                    task.top ? "text-blue-600 font-bold" : "text-gray-500"
-                  }`}
+                  className="text-xs text-gray-500"
                 >
                   Top
                 </button>
